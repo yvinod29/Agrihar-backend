@@ -23,12 +23,10 @@ const RegistrationSchema = new mongoose.Schema({
     },
     feePaid: {
         type: Number,
-        required: true
-    },
+     },
     transactionId: {
         type: String,
-        required: true
-    }
+     }
 }, {
     timestamps: true // Adds timestamps for createdAt and updatedAt
 });

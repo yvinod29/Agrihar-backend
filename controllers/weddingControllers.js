@@ -17,7 +17,7 @@ export const CreateWedding = async (req, res) => {
       brideEmail,
       duration,
       languagesKnown,
-      schedule,
+      events,
       foodOffered,
       facilitiesProvided,
        accountDetails,
@@ -48,46 +48,10 @@ if (req.fields.facilitiesProvided) {
       guestGuide.relation = req.fields[`guestGuide[relation]`];
       guestGuide.email = req.fields[`guestGuide[email]`];
        console.log(guestGuide)
-      
-//     let scheduleArray = [];
-//     console.log("she")
-// let scheduleIndex = 0;
-// while (true) {
-//     let eventsArray = [];
-//      let scheduleKey = `schedule[${scheduleIndex}]`;
-//     const scheduleDate = req.fields[`${scheduleKey}[date]`];
-//     const schedulePlace = req.fields[`${scheduleKey}[place]`];
-//     if (!scheduleDate || !schedulePlace) {
-//         break;
-//     }
-//     let eventsIndex = 0;
-//     while (true) {
-//         const eventKey = `${scheduleKey}[events][${eventsIndex}]`;
-//         if (!req.fields[`${eventKey}[eventName]`]) {
-//             break;
-//         }
-//         const event = {
-//             eventName: req.fields[`${eventKey}[eventName]`],
-//             startingTime: req.fields[`${eventKey}[startingTime]`], 
-//             description: req.fields[`${eventKey}[description]`],
-//             dressCode: req.fields[`${eventKey}[dressCode]`],
-//             musicAndDancing: req.fields[`${eventKey}[musicAndDancing]`],
-//         };
-//         eventsArray.push(event);
-//         eventsIndex++;
-        
-//     }
-//     console.log(eventsArray)
-//     scheduleArray.push({
-//         date: scheduleDate,
-//         place: schedulePlace,
-//         events: eventsArray,
-//     });
-//     scheduleIndex++;
-// }
 
-// console.log(scheduleArray);
-
+       const eventsArray = JSON.parse(events);
+       console.log(eventsArray)
+ 
     
     // Upload images to Cloudinary
      
@@ -120,7 +84,7 @@ if (req.fields.facilitiesProvided) {
       languagesKnown: languagesKnownArray,
       foodOffered,
       facilitiesProvided: facilitiesProvidedArray,
-      schedule,
+      events:eventsArray,
       guestGuide,
      accountDetails,
       hostedBy: req.user._id, // Assuming req.user contains the authenticated user's information
@@ -132,7 +96,7 @@ if (req.fields.facilitiesProvided) {
     // Add the wedding ID to the hosting user's registeredWeddings array
     await User.findByIdAndUpdate(
       req.user._id,
-      { $push: { registeredWeddings: savedWedding._id } },
+      { $push: { hostedWeddings: savedWedding._id } },
       { new: true }
     );
 
@@ -145,6 +109,7 @@ if (req.fields.facilitiesProvided) {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
 
 export const GetAllWeddings = async (req, res) => {
   try {

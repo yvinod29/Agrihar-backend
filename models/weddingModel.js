@@ -53,62 +53,54 @@ const weddingSchema = new mongoose.Schema(
       type: [String],
       required: true,
     },
-    schedule: [
+
+    events: [
       {
-        date: {
+        eventName: {
+          type: String,
+          required: true,
+        },
+        startingTime: {
+          type: String,
+          required: true,
+        },
+        description: {
+          type: String,
+          required: true,
+        },
+        dressCode: {
+          type: String,
+          required: true,
+        },
+        musicAndDancing: {
           type: String,
           required: true,
         },
         place: {
           type: String,
-          required: true,
         },
-        events: [
-          {
-            eventName: {
-              type: String,
-              required: true,
-            },
-            startingTime: {
-              type: String,
-              required: true,
-            },
-            description: {
-              type: String,
-              required: true,
-            },
-            dressCode: {
-              type: String,
-              required: true,
-            },
-            musicAndDancing: {
-              type: String,
-              required: true,
-            },
-          },
-        ],
       },
     ],
-    guestGuide: 
-      {
-        name: {
-          type: String,
-          required: true,
-        },
-        phoneNumber: {
-          type: String,
-          required: true,
-        },
-        relation: {
-          type: String,
-          required: true,
-        },
-        email: {
-          type: String,
-          required: true,
-        },
+
+    guestGuide: {
+      name: {
+        type: String,
+        required: true,
       },
-    
+      phoneNumber: {
+        type: String,
+        required: true,
+      },
+      relation: {
+        type: String,
+        required: true,
+      },
+      email: {
+        type: String,
+        required: true,
+      },
+    },
+
     accountDetails: {
       type: String,
       required: true,
