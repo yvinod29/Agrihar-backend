@@ -7,18 +7,19 @@ import SigninForm from "./_auth/signinForm";
 import WeddingCard from "./_root/pages/WeddingCard";
 import HostWedding from "./_root/pages/HostWedding";
 
+
 function App() {
   return (
-    <div>
-    <Navbar />
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/signup" element={<SignupForm />} />
-      <Route path="/signin" element={<SigninForm />} />
-      <Route path="/wedding/:wedding_id" element={<WeddingCard />} />
-      <Route path="/host-wedding" element={<HostWedding />} />
-    </Routes>
-  </div>
+      <div>
+          <Navbar />
+          <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/signup" element={<SignupForm />} />
+              <Route path="/signin" element={<SigninForm />} />
+              <Route path="/wedding/:wedding_id" element={<WeddingCard />} />
+              <Route path="/host-wedding" element={<HostWedding />} />
+          </Routes>
+      </div>
   );
 }
 

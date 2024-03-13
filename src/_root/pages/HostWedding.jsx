@@ -247,6 +247,7 @@ const HostWedding = () => {
                             activeStep={step}
                             alternativeLabel
                             connector={<QontoConnector />}
+                            style={{ zIndex: 1 }}
                         >
                             {steps.map((label, index) => (
                                 <Step key={label}>
