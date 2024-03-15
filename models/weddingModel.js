@@ -3,7 +3,35 @@ import RegistrationSchema from "./registerModel.js";
 
 const weddingSchema = new mongoose.Schema(
   {
-    groomName: {
+    hostRole:{
+      type: String,
+      required:true
+    },
+    hostFirstName: {
+      type: String,
+      required: true,
+    },
+    hostLastName: {
+      type: String,
+      required: true,
+    },
+    hostPhoneNumber: {
+      type: String,
+      required: true,
+    },
+    hostEmail: {
+      type: String,
+      required: true,
+    },
+    hostRelation:{
+      type:String,
+      
+    },
+    groomFirstName: {
+      type: String,
+      required: true,
+    },
+    groomLastName: {
       type: String,
       required: true,
     },
@@ -15,7 +43,11 @@ const weddingSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    brideName: {
+    brideFirstName: {
+      type: String,
+      required: true,
+    },
+    brideLastName: {
       type: String,
       required: true,
     },
@@ -27,7 +59,7 @@ const weddingSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    image: {
+    images: [{
       publicId: {
         type: String,
         required: true,
@@ -36,7 +68,7 @@ const weddingSchema = new mongoose.Schema(
         type: String,
         required: true,
       },
-    },
+    }],
     duration: {
       type: Number,
       required: true,
@@ -44,16 +76,11 @@ const weddingSchema = new mongoose.Schema(
     languagesKnown: {
       type: [String], // Array of languages known
       required: true,
-    },
-    foodOffered: {
-      type: String,
-      required: true,
-    },
+    },  
     facilitiesProvided: {
       type: [String],
       required: true,
     },
-
     events: [
       {
         eventName: {
@@ -76,9 +103,28 @@ const weddingSchema = new mongoose.Schema(
           type: String,
           required: true,
         },
-        place: {
+        foodOffered:{
+          type:String
+        },
+        country: {
           type: String,
         },
+        region:{
+          type: String
+        },
+        city:{
+          type:String
+        },
+        postalCode: {
+          type: String,
+        },
+        street: {
+          type: String,
+        },
+        venueName: {
+          type: String,
+        },
+
       },
     ],
 

@@ -7,88 +7,108 @@ export const CreateWedding = async (req, res) => {
   try {
     // Destructure fields from the parsed form data
     console.log(req.fields);
-    console.log(req.body)
     const {
-      groomName,
+      hostRole,
+      hostFirstName,
+      hostLastName,
+      hostEmail,
+      hostPhoneNumber,
+      groomFirstName,
+      groomLastName,
       groomPhoneNumber,
       groomEmail,
-      brideName,
+      brideFirstName,
+      brideLastName,
       bridePhoneNumber,
       brideEmail,
       duration,
-      languagesKnown,
       events,
       foodOffered,
-      facilitiesProvided,
-       accountDetails,
+      accountDetails,
     } = req.fields;
 
     // Convert facilitiesProvided to an array
     // Initialize an empty array to store facilities provided
- let facilitiesProvidedArray = [];
+    let facilitiesProvidedArray = [];
 
-// Check if the facilitiesProvided field exists in the request fields
-if (req.fields.facilitiesProvided) {
-  // Split the string by comma to convert it into an array
-  facilitiesProvidedArray = req.fields.facilitiesProvided.split(',');
-}
+    // Check if the facilitiesProvided field exists in the request fields
+    if (req.fields.facilitiesProvided) {
+      // Split the string by comma to convert it into an array
+      facilitiesProvidedArray = req.fields.facilitiesProvided.split(",");
+    }
 
- let languagesKnownArray = [];
-     if (req.fields.languagesKnown){
-      languagesKnownArray=req.fields.languagesKnown.split(',');
-     }
- console.log("guide")
+    let languagesKnownArray = [];
+    if (req.fields.languagesKnown) {
+      languagesKnownArray = req.fields.languagesKnown.split(",");
+    }
+    console.log("guide");
 
     // Convert guestGuide to an array of objects
-         let guestGuide = {};
-       let nameKey = `guestGuide[name]`;
-      
-      guestGuide.name = req.fields[nameKey];
-      guestGuide.phoneNumber = req.fields[`guestGuide[phoneNumber]`];
-      guestGuide.relation = req.fields[`guestGuide[relation]`];
-      guestGuide.email = req.fields[`guestGuide[email]`];
-       console.log(guestGuide)
+    let guestGuide = {};
+    let nameKey = `guestGuide[name]`;
 
-       const eventsArray = JSON.parse(events);
-       console.log(eventsArray)
- 
-    
+    guestGuide.name = req.fields[nameKey];
+    guestGuide.phoneNumber = req.fields[`guestGuide[phoneNumber]`];
+    guestGuide.relation = req.fields[`guestGuide[relation]`];
+    guestGuide.email = req.fields[`guestGuide[email]`];
+    console.log(guestGuide);
+
+    const eventsArray = JSON.parse(events);
+    console.log(eventsArray);
+
     // Upload images to Cloudinary
-     
-    let image = null;
-    if (req.files && req.files.image) {
-      console.log("Found image");
-      const uploadResult = await cloudinary.uploader.upload(
-        req.files.image.path,
-        {
-          folder: "wedding-images", // Set the folder in Cloudinary where you want to store wedding images
-          // Add other Cloudinary upload options as needed
-        }
-      );
-      image = {
-        publicId: uploadResult.public_id,
-        secureUrl: uploadResult.secure_url,
-      };
-    }
-     
+    const formData = req.files;
+
+// Extract files into an array
+const filesArray = [];
+
+for (const file of Object.values(formData)) {
+  // Assuming you're using Cloudinary, you can upload the file here
+  // Example: 
+  const uploadResult = await cloudinary.uploader.upload(file.path, {
+    folder: "wedding-images", // Set the folder in Cloudinary where you want to store wedding images
+    // Add other Cloudinary upload options as needed
+  });
+  
+  // Push information about the uploaded file to filesArray
+  filesArray.push({
+    publicId: uploadResult.public_id,
+    secureUrl: uploadResult.secure_url, // or whatever you need
+    // Add other relevant information about the file
+  });
+}
+console.log("files")
+console.log(filesArray);
+
+
+    
+
     // Create a new wedding instance
     const newWedding = new Wedding({
-      groomName,
+      hostRole,
+      hostFirstName,
+      hostLastName,
+      hostEmail,
+      hostPhoneNumber,
+      groomFirstName,
+      groomLastName,
       groomPhoneNumber,
       groomEmail,
-      brideName,
+      brideFirstName,
+      brideLastName,
       bridePhoneNumber,
       brideEmail,
-      image,
+      images:filesArray,
       duration,
       languagesKnown: languagesKnownArray,
       foodOffered,
       facilitiesProvided: facilitiesProvidedArray,
-      events:eventsArray,
+      events: eventsArray,
       guestGuide,
-     accountDetails,
-      hostedBy: req.user._id, // Assuming req.user contains the authenticated user's information
+      accountDetails,
+      hostedBy: req.user._id,
     });
+    console.log(newWedding);
 
     // Save the new wedding to the database
     const savedWedding = await newWedding.save();
@@ -99,7 +119,6 @@ if (req.fields.facilitiesProvided) {
       { $push: { hostedWeddings: savedWedding._id } },
       { new: true }
     );
-
     // Return success response
     res
       .status(201)
@@ -109,7 +128,6 @@ if (req.fields.facilitiesProvided) {
     res.status(500).json({ error: "Internal server error" });
   }
 };
-
 
 export const GetAllWeddings = async (req, res) => {
   try {
@@ -134,5 +152,3 @@ export const GetWeddingById = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
-
- 
