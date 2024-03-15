@@ -2,28 +2,23 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const HostWeddingstep1 = ({ formData, handleInputChange, handleNextStep }) => {
-    const validatePhoneNumber = (phoneNumber) => {
-        // Regular expression to validate phone number format with country code
-        const phoneRegex = /^\+(?:[0-9] ?){6,14}[0-9]$/;
-        return phoneRegex.test(phoneNumber);
-    };
-
+   
     const handleSubmit = () => {
         // Proceed to the next step if all validations pass
         handleNextStep();
     };
 
     return (
-        <div className="max-w-md mx-auto flex justify-center items-center">
+        <div className="   ">
             <div className="">
                 <div className="mb-4">
                     <label className="block text-sm font-bold mb-2">
                         Who are you?
                     </label>
                     <select
-                        className="block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
-                        name="role"
-                        value={formData.role}
+                        className="block w-80 border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+                        name="hostRole"
+                        value={formData.hostRole}
                         onChange={handleInputChange}
                         required
                     >
@@ -34,16 +29,16 @@ const HostWeddingstep1 = ({ formData, handleInputChange, handleNextStep }) => {
                     </select>
                 </div>
 
-                {formData.role === "other" && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                {formData.hostRole === "other" && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label className="block text-sm font-bold mb-2">
                                 Your First Name:
                                 <input
                                     className="block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
                                     type="text"
-                                    name="otherPersonFirstName"
-                                    value={formData.otherPersonFirstName}
+                                    name="hostFirstName"
+                                    value={formData.hostFirstName}
                                     onChange={handleInputChange}
                                     required
                                 />
@@ -56,8 +51,8 @@ const HostWeddingstep1 = ({ formData, handleInputChange, handleNextStep }) => {
                                 <input
                                     className="block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
                                     type="text"
-                                    name="otherPersonLastName"
-                                    value={formData.otherPersonLastName}
+                                    name="hostLastName"
+                                    value={formData.hostLastName}
                                     onChange={handleInputChange}
                                     required
                                 />
@@ -70,9 +65,10 @@ const HostWeddingstep1 = ({ formData, handleInputChange, handleNextStep }) => {
                                 <input
                                     className="block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
                                     type="text"
-                                    name="otherRelation"
-                                    value={formData.otherRelation}
+                                    name="hostRelation"
+                                    value={formData.hostRelation}
                                     onChange={handleInputChange}
+                                    placeholder="Eg : Brother"
                                     required
                                 />
                             </label>
@@ -84,8 +80,8 @@ const HostWeddingstep1 = ({ formData, handleInputChange, handleNextStep }) => {
                                 <input
                                     className="block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
                                     type="text"
-                                    name="otherPhoneNumber"
-                                    value={formData.otherPhoneNumber}
+                                    name="hostPhoneNumber"
+                                    value={formData.hostPhoneNumber}
                                     onChange={handleInputChange}
                                     required
                                 />
@@ -98,8 +94,8 @@ const HostWeddingstep1 = ({ formData, handleInputChange, handleNextStep }) => {
                                 <input
                                     className="block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
                                     type="email"
-                                    name="otherEmail"
-                                    value={formData.otherEmail}
+                                    name="hostEmail"
+                                    value={formData.hostEmail}
                                     onChange={handleInputChange}
                                     required
                                 />
@@ -223,7 +219,7 @@ const HostWeddingstep1 = ({ formData, handleInputChange, handleNextStep }) => {
                 </div>
 
                 <button
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-full"
+                    className="bg-blue-500  hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring focus:ring-blue-500 focus:ring-opacity-50 w-40 "
                     onClick={handleSubmit}
                 >
                     Next

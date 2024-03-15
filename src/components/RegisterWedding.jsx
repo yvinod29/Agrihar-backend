@@ -3,33 +3,44 @@ import { useRegisterWeddingMutation } from '../store/api/WeddingApi';
 import { useParams } from 'react-router-dom';
 
 const RegisterWedding = () => {
-    const {wedding_id}=useParams();
-    const [RegisterWedding]=useRegisterWeddingMutation();
-  const [formData, setFormData] = useState({
-    fullName: '',
-    email: '',
-    phoneNumber: '',
-    numberOfGuests: '',
-    place: ''
-  });
+    const { wedding_id } = useParams();
+    const [RegisterWedding] = useRegisterWeddingMutation();
+    const [showForm, setShowForm] = useState(false); // State to manage form visibility
+    const [formData, setFormData] = useState({
+        fullName: '',
+        email: '',
+        phoneNumber: '',
+        numberOfGuests: '',
+        place: ''
+    });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    };
 
-  const handleSubmit = async(e) => {
-    e.preventDefault();
-    console.log(formData);
-    const token=localStorage.getItem('token')
-    const session =RegisterWedding({formData, token,wedding_id})
-    // Here you can send the formData to the server or perform any other actions
-  };
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        console.log(formData);
+        const token = localStorage.getItem('token');
+        const session = RegisterWedding({ formData, token, wedding_id });
+        // Here you can send the formData to the server or perform any other actions
+    };
 
-  return (
-    <div className='w-80 m-10 p-5'>
-        <h2 className='text-1xl font-bold '>Registration Form</h2>
-      <form onSubmit={handleSubmit}>
+    const handleJoinClick = () => {
+        setShowForm(true); // Show the form when the "Join Wedding" button is clicked
+    };
+
+    return (
+        <div className='w-80 m-10 p-5 bg-gray-100`'>
+            {!showForm ? ( // Render the button if form is not shown
+                <button onClick={handleJoinClick} className="px-4 py-2 bg-blue-500 text-white rounded-md mb-4">
+                    Join Wedding
+                </button>
+            ) : (
+                <>
+                    <h2 className='text-1xl font-bold mb-4'>Registration Form</h2>
+                    <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label className="block">
             Full Name:
@@ -92,8 +103,10 @@ const RegisterWedding = () => {
         </div>
         <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded-md">Submit</button>
       </form>
-    </div>
-  );
+                </>
+            )}
+        </div>
+    );
 };
 
 export default RegisterWedding;

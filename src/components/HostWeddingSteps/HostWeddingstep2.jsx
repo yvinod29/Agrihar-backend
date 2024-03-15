@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
 const HostWeddingstep2 = ({
@@ -7,29 +7,9 @@ const HostWeddingstep2 = ({
     handleNextStep,
     handlePreviousStep,
 }) => {
-    const [imagePreviews, setImagePreviews] = useState([]);
-
-   const handleFileChange = (event) => {
-       const files = event.target.files;
-
-       if (files.length > 0) {
-           const newPreviews = Array.from(files).map((file) => {
-               const reader = new FileReader();
-               return new Promise((resolve) => {
-                   reader.onload = (e) => resolve(e.target.result);
-                   reader.readAsDataURL(file);
-               });
-           });
-
-           Promise.all(newPreviews).then((newPreviewsArray) => {
-               setImagePreviews((prevPreviews) => [
-                   ...prevPreviews,
-                   ...newPreviewsArray,
-               ]);
-           });
-       }
-   };
-
+     
+    
+   
     return (
         <div className="p-8 bg-white rounded-md w-full">
             <div className="flex flex-col items-center mb-4">
@@ -43,7 +23,7 @@ const HostWeddingstep2 = ({
                         multiple
                         accept="image/*"
                         className="hidden"
-                        onChange={handleFileChange}
+                        onChange={handleImageUpload}
                     />
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -61,17 +41,18 @@ const HostWeddingstep2 = ({
                     </svg>
                     Upload Photos
                 </label>
-                <div className="flex flex-wrap justify-center gap-4 mt-4">
-                    {imagePreviews.map((preview, index) => (
+                 <div className="flex flex-wrap justify-center gap-4 mt-4">
+                    {formData.images.map((image, index) => (
                         <img
                             key={index}
-                            src={preview}
-                            alt={`Preview ${index + 1}`}
-                            className="w-48 h-48 object-cover rounded-md"
+                            src={URL.createObjectURL(image)}
+                            alt={`Uploaded image ${index}`}
+                            className="w-32 h-32 rounded-md"
                         />
                     ))}
                 </div>
-            </div>
+                     
+             </div>
 
             <div className="flex justify-between">
                 <button

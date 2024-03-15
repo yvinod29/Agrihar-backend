@@ -46,7 +46,7 @@ const Navbar = () => {
             }`}
         >
             <nav
-                className={`py-2 lg:px-6 px-2 ${
+                className={`py-3 lg:px-6 px-2 ${
                     isSticky ? "sticky top-0 left-0 right-0 duration-300" : ""
                 }`}
             >
@@ -82,7 +82,7 @@ const Navbar = () => {
                         {isAuthenticated ? (
                             <div className="flex gap-2">
                                 <Link to="/host-wedding">
-                                    <div className="md:block text-sm font-semibold py-1 px-2 rounded-full hover:bg-primary hover:text-white transition cursor-pointer shadow-md border-neutral-50">
+                                    <div className="md:block text-sm font-semibold py-1 px-2 rounded-full bg-primary text-white  hover:bg-white hover:text-black transition cursor-pointer shadow-md border-neutral-50">
                                         Host Wedding
                                     </div>
                                 </Link>

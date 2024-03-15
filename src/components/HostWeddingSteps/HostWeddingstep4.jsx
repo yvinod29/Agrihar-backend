@@ -61,6 +61,7 @@ const HostWeddingstep4 = ({
                                 name="guideRelation"
                                 value={formData.guideRelation}
                                 onChange={handleInputChange}
+                                placeholder="Eg : Sister "
                             />
                         </label>
                     </div>
