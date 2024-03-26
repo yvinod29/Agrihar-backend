@@ -8,15 +8,15 @@ import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import Check from "@mui/icons-material/Check";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import PropTypes from "prop-types";
-import HostWeddingstep1 from "../../components/HostWeddingSteps/HostWeddingstep1";
-import HostWeddingstep2 from "../../components/HostWeddingSteps/HostWeddingstep2";
-import HostWeddingstep3 from "../../components/HostWeddingSteps/HostWeddingstep3";
-import HostWeddingstep4 from "../../components/HostWeddingSteps/HostWeddingstep4";
-import { useCreateWeddingMutation } from "../../store/api/WeddingApi";
 import StepConnector, {
   stepConnectorClasses,
 } from "@mui/material/StepConnector";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import HostAgricultureStep1 from "../../components/HostAgricultureSteps/HostAgricultureStep1";
+import HostAgricultureStep2 from "../../components/HostAgricultureSteps/HostAgricultureStep2";
+import HostAgricultureStep3 from "../../components/HostAgricultureSteps/HostAgricultureStep3";
+import HostAgricultureStep4 from "../../components/HostAgricultureSteps/HostAgricultureStep4";
+import { useCreateAgricultureSessionMutation } from "../../store/api/AgricultureApi";
 
 const QontoConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -52,7 +52,7 @@ const QontoStepIconRoot = styled("div")(({ theme, ownerState }) => ({
     color: "#784af4",
     zIndex: 1,
     fontSize: 18,
-   },
+  },
   "& .QontoStepIcon-circle": {
     width: 8,
     height: 8,
@@ -130,41 +130,27 @@ CustomColorlibStepIcon.propTypes = {
   icon: PropTypes.node,
 };
 
-const steps = [
-  "Bride and Groom details",
-  "Photos",
-  "Schedule",
-  "Guide infomation",
-];
+const steps = ["Instrctor Details", "Photos", "Schedule", "Bank Account"];
 
-const HostWedding = () => {
-  const [CreateWedding] = useCreateWeddingMutation();
-  const [step, setStep] = useState(0); // Start from step 0
+const HostAgriculture = () => {
+  const [CreateWedding] = useCreateAgricultureSessionMutation();
+  const [step, setStep] = useState(0);
   const [formData, setFormData] = useState({
-    hostRole: "",
-    hostFirstName:"",
-    hostLastName:"",
-    hostRelation:"",
-    hostPhoneNumber:"",
-    hostEmail:"",
-    groomFirstName: "",
-    groomLastName: "",
-    groomPhoneNumber: "",
-    groomEmail: "",
-    brideFirstName: "",
-    brideLastName: "",
-    bridePhoneNumber: "",
-    brideEmail: "",
-    images:[] ,
+    instructorFirstName: "",
+    instructorLastName: "",
+    instructorEmail: "",
+    instructorPhoneNumber: "",
+    instructorDescription: "",
+    whatToTeach: "",
+    images: [],
     duration: "",
+    pricePerSession: 0,
+    location: [],
     languagesKnown: "",
-    foodOffered: "",
+    studentsPerClass: 40,
     facilitiesProvided: "",
-    events: [],
-    guideName: "",
-    guidePhoneNumber: "",
-    guideEmail: "",
-    guideRelation: "",
+    requirements: "",
+    accountDetails: [],
   });
 
   const totalSteps = steps.length;
@@ -178,8 +164,10 @@ const HostWedding = () => {
 
   const handleImageUpload = (e) => {
     const images = Array.from(e.target.files);
-    setFormData((prevData) => ({ ...prevData, images: [...prevData.images, ...images] }));
-
+    setFormData((prevData) => ({
+      ...prevData,
+      images: [...prevData.images, ...images],
+    }));
   };
   const handleNextStep = () => {
     setStep((prevStep) => prevStep + 1);
@@ -201,44 +189,33 @@ const HostWedding = () => {
 
       // Create FormData
       const formDataToSend = new FormData();
-      formDataToSend.append("hostRole",formData.hostRole);
-      if(formData.hostRole==="other"){
-        formDataToSend.append("hostFirstName",formData.hostFirstName);
-        formDataToSend.append("hostLastName",formData.hostLastName);
-        formDataToSend.append("hostPhoneNumber",formData.hostPhoneNumber);
-        formDataToSend.append("hostEmail",formData.hostEmail);
-        formDataToSend.append("hostRelation",formData.hostRelation);
-      }
-      formDataToSend.append("groomFirstName", formData.groomFirstName);
-      formDataToSend.append("groomLastName", formData.groomLastName);
-      formDataToSend.append("groomPhoneNumber", formData.groomPhoneNumber);
-      formDataToSend.append("groomEmail", formData.groomEmail);
-      formDataToSend.append("brideFirstName", formData.brideFirstName);
-      formDataToSend.append("brideLastName", formData.brideLastName);
-      formDataToSend.append("bridePhoneNumber", formData.bridePhoneNumber);
-      formDataToSend.append("brideEmail", formData.brideEmail);
-      formDataToSend.append("duration", formData.duration);
-      formDataToSend.append("languagesKnown", formData.languagesKnown);
-      formDataToSend.append("foodOffered", formData.foodOffered);
+      formDataToSend.append("instructorFirstName",formData.instructorFirstName);
+      formDataToSend.append("instructorLastName", formData.instructorLastName);
+      formDataToSend.append("instructorEmail", formData.instructorEmail);
+      formDataToSend.append("instructorDescription",formData.instructorDescription);
+      formDataToSend.append("instructorPhoneNumber",formData.instructorPhoneNumber);
+      formDataToSend.append("whatToTeach", formData.whatToTeach);
+      formDataToSend.append("pricePerSession", formData.pricePerSession);
+      formDataToSend.append("studentsPerClass", formData.studentsPerClass);
       formDataToSend.append("facilitiesProvided", formData.facilitiesProvided);
-      formDataToSend.append("accountDetails", formData.accountDetails);
+      formDataToSend.append("requirements", formData.requirements);
       formData.images.forEach((image, index) => {
         formDataToSend.append(`images[${index}]`, image);
-    });      
-    formDataToSend.append(`guestGuide[name]`, formData.guideName);
-      formDataToSend.append(`guestGuide[phoneNumber]`,formData.guidePhoneNumber);
-      formDataToSend.append(`guestGuide[relation]`, formData.guideRelation);
-      formDataToSend.append(`guestGuide[email]`, formData.guideEmail);
-      const eventsArray = JSON.stringify(formData.events);
-      // Append the JSON string to FormData
-      formDataToSend.append("events", eventsArray);
+      });
+
+      const location = JSON.stringify(formData.location);
+      // Append the JSON string to FormDat
+      formDataToSend.append("location", location);
+
+      const accountDetails = JSON.stringify(formData.accountDetails);
+      // Append the JSON string to FormDat
+      formDataToSend.append("accountDetails", accountDetails);
+
       console.log(formDataToSend);
       console.log([...formDataToSend.entries()]);
-      console.log(formData.groomEmail);
+
       const response = await CreateWedding({ formDataToSend, token });
       console.log("Wedding created successfully:", response);
-
-     
     } catch (error) {
       console.error(error);
       // Handle error
@@ -249,7 +226,7 @@ const HostWedding = () => {
     switch (step) {
       case 0:
         return (
-          <HostWeddingstep1
+          <HostAgricultureStep1
             formData={formData}
             handleInputChange={handleInputChange}
             handleNextStep={handleNextStep}
@@ -257,7 +234,7 @@ const HostWedding = () => {
         );
       case 1:
         return (
-          <HostWeddingstep2
+          <HostAgricultureStep2
             formData={formData}
             handleImageUpload={handleImageUpload}
             handleNextStep={handleNextStep}
@@ -266,7 +243,7 @@ const HostWedding = () => {
         );
       case 2:
         return (
-          <HostWeddingstep3
+          <HostAgricultureStep3
             formData={formData}
             handleInputChange={handleInputChange}
             handleNextStep={handleNextStep}
@@ -275,7 +252,7 @@ const HostWedding = () => {
         );
       case 3:
         return (
-          <HostWeddingstep4
+          <HostAgricultureStep4
             formData={formData}
             handleInputChange={handleInputChange}
             handleSubmit={handleSubmit}
@@ -290,9 +267,7 @@ const HostWedding = () => {
   return (
     <div className="mt-20">
       <div className=" p-20 rounded-lg shadow-md mx-auto max-w-screen-lg">
-        <h2 className="text-2xl mb-4 text-center mt-8">
-          Register Your Wedding
-        </h2>
+        <h2 className="text-2xl mb-4 text-center mt-8">Agriculture Session</h2>
         <div className="mb-6">
           <Stack sx={{ width: "100%" }} spacing={3}>
             <Stepper
@@ -321,4 +296,4 @@ const HostWedding = () => {
   );
 };
 
-export default HostWedding;
+export default HostAgriculture;

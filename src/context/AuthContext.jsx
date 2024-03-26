@@ -7,6 +7,7 @@ export const INITIAL_USER = {
     firstName: "",
     lastName:"",
     phoneNumber: "",
+    registeredWeddings:[]
  };
 
 export const INITIAL_STATE = {

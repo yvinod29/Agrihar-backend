@@ -4,18 +4,22 @@ import { setupListeners } from '@reduxjs/toolkit/query';
   import { authApi } from './api/AuthApi';
   import authReducer  from "./state/authSlice";
 import weddingReducer from './state/weddingSlice'
+import agricultureReducer from './state/agricultureSlice'
 import { weddingApi } from './api/WeddingApi';
+import { agricultureApi } from './api/AgricultureApi';
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     [authApi.reducerPath]: authApi.reducer,
     wedding:weddingReducer,
-    [weddingApi.reducerPath]:weddingApi.reducer
+    [weddingApi.reducerPath]:weddingApi.reducer,
+    agriculture:agricultureReducer,
+    [agricultureApi.reducerPath]:agricultureApi.reducer
      
   },
 
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(authApi.middleware,weddingApi.middleware),
+    getDefaultMiddleware().concat(authApi.middleware,weddingApi.middleware,agricultureApi.middleware),
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

@@ -45,6 +45,8 @@ export function AuthProvider({ children }) {
             lastName: data.user.lastName,
             email: data.user.email,
             phoneNumber: data.user.phoneNumber,
+            registeredWeddings:data.user.registeredWeddings
+
           });
         
         console.log("user");
