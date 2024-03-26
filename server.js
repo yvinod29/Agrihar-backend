@@ -6,6 +6,7 @@ import colors from 'colors';
 import connectDB from "./config/db.js";
 import userAuthRoutes from './routes/userAuthRoute.js'
 import weddingRoutes from './routes/weddingRoutes.js'
+import agricultureRoutes from './routes/agricultureRoutes.js'
 import User from './models/userModel.js';
 import { requireSignIn } from "./middlewares/userAuthMiddleware.js";
 import cloudinary from './config/cloudinaryConfig.js'; 
@@ -27,6 +28,8 @@ app.use(morgan("dev"));
 app.use('/api/v1/auth',userAuthRoutes);
 
 app.use('/api/v1/wedding',weddingRoutes);
+
+app.use('/api/v1/agriculture',agricultureRoutes);
 
 
 
