@@ -4,6 +4,7 @@ import AuthContext, { INITIAL_USER } from "./AuthContext";
  import { useNavigate } from "react-router-dom";
 import { useVerifyUserMutation } from "../store/api/AuthApi";
 
+
 export function AuthProvider({ children }) {
   const navigate = useNavigate();
   const [user, setUser] = useState(INITIAL_USER);
@@ -45,7 +46,10 @@ export function AuthProvider({ children }) {
             lastName: data.user.lastName,
             email: data.user.email,
             phoneNumber: data.user.phoneNumber,
-            registeredWeddings:data.user.registeredWeddings
+            registeredWeddings:data.user.registeredWeddings,
+            hostedWeddings:data.user.hostedWeddings,
+            hostedAgriculture:data.user.hostedAgriculture
+
 
           });
         

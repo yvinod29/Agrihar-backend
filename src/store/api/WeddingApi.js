@@ -11,6 +11,18 @@ export const weddingApi = createApi({
       getWeddingById: builder.query({
         query: (wedding_id) => `/api/v1/wedding/${wedding_id}`,
       }),
+      getWeddingByIds: builder.mutation({
+        query:({ token})=>({
+          url:'/api/v1/wedding/get/ids',
+          method:"GET",
+          headers: {
+            Authorization: `${token}`,
+          },
+        
+  
+        })
+
+      }),
       CreateWedding : builder.mutation({
       
         query: ({formDataToSend,token}) => ({
@@ -44,7 +56,7 @@ export const{
     useGetWeddingsQuery,
     useGetWeddingByIdQuery,
     useCreateWeddingMutation,
-    useRegisterWeddingMutation
-    
+    useRegisterWeddingMutation,
+    useGetWeddingByIdsMutation
 }=weddingApi
 

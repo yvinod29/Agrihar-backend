@@ -265,7 +265,7 @@ const HostWeddingstep3 = ({
                 type="text"
                 id={`postalcode-${index}`}
                 name="postalCode"
-                value={formData.postalCode}
+                value={event.postalCode}
                 onChange={(e) =>
                   handleEventInputChange(index, "postalCode", e.target.value)
                 }

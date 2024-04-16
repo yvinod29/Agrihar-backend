@@ -7,7 +7,7 @@ import { useUserContext } from "../../context/useUserContext";
 const WeddingCard = () => {
   const { wedding_id } = useParams();
   const { user } = useUserContext();
-  const [weddingData, setWeddingData] = useState(null); // Initialize with null
+  const [weddingData, setWeddingData] = useState(null); 
 
   const { data, error, isLoading, isSuccess } =
     useGetWeddingByIdQuery(wedding_id);

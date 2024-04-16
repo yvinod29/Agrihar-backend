@@ -48,6 +48,17 @@ const HostAgricultureStep3 = ({
       
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="flex flex-col">
+          <label className="font-semibold">FarmName :</label>
+          <input
+            type="text"
+            name="farmName"
+            value={formData.farmName}
+            onChange={handleInputChange}
+            className="border p-2 rounded-md"
+            
+          />
+        </div>
         <div className="flex flex-col">
           <label className="font-semibold">Languages Known:</label>
           <input

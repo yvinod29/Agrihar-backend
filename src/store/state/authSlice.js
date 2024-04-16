@@ -19,6 +19,7 @@ export const authSlice = createSlice({
       state.firstName = action.payload.firstName;
       state.lastName = action.payload.lastName;
       state.email = action.payload.email;
+      
     },
   },
 });

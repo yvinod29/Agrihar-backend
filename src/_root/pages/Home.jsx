@@ -19,11 +19,7 @@ const Home = () => {
     return <div>Error: {error.message}</div>;
   }
 
-  // Function to format date as "dd mmm yyyy"
-  const formatDate = (date) => {
-    const options = { day: "numeric", month: "short", year: "numeric" };
-    return new Date(date).toLocaleDateString("en-US", options);
-  };
+  
 
   // Function to format date range as "dd to dd mmm yyyy"
   const formatDateRange = (startDate, endDate) => {
@@ -33,9 +29,7 @@ const Home = () => {
       month: "short",
     });
 
-    const endMonth = new Date(endDate).toLocaleString("en-us", {
-      month: "short",
-    });
+    
     const year = new Date(startDate).getFullYear();
     return `${startDay} to ${endDay} ${startMonth} ${year}`;
   };

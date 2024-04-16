@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import {useNavigate} from "react-router-dom"
 import Stack from "@mui/material/Stack";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
@@ -134,6 +135,7 @@ const steps = ["Instrctor Details", "Photos", "Schedule", "Bank Account"];
 
 const HostAgriculture = () => {
   const [CreateWedding] = useCreateAgricultureSessionMutation();
+  const navigate=useNavigate()
   const [step, setStep] = useState(0);
   const [formData, setFormData] = useState({
     instructorFirstName: "",
@@ -141,6 +143,7 @@ const HostAgriculture = () => {
     instructorEmail: "",
     instructorPhoneNumber: "",
     instructorDescription: "",
+    farmName:"",
     whatToTeach: "",
     images: [],
     duration: "",
@@ -194,6 +197,9 @@ const HostAgriculture = () => {
       formDataToSend.append("instructorEmail", formData.instructorEmail);
       formDataToSend.append("instructorDescription",formData.instructorDescription);
       formDataToSend.append("instructorPhoneNumber",formData.instructorPhoneNumber);
+      formDataToSend.append("farmName",formData.farmName);
+      formDataToSend.append("languagesKnown",formData.languagesKnown)
+
       formDataToSend.append("whatToTeach", formData.whatToTeach);
       formDataToSend.append("pricePerSession", formData.pricePerSession);
       formDataToSend.append("studentsPerClass", formData.studentsPerClass);
@@ -215,7 +221,12 @@ const HostAgriculture = () => {
       console.log([...formDataToSend.entries()]);
 
       const response = await CreateWedding({ formDataToSend, token });
-      console.log("Wedding created successfully:", response);
+      if(response.data){
+        
+
+        console.log("Wedding created successfully:", response);
+        navigate("/profile");
+      }
     } catch (error) {
       console.error(error);
       // Handle error
