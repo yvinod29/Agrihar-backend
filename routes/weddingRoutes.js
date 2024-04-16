@@ -2,7 +2,7 @@
 import express from 'express';
 import formidable from 'express-formidable'
 
-import { CreateWedding, GetAllWeddings, GetWeddingById } from '../controllers/weddingControllers.js';
+import { CreateWedding, GetAllWeddings, GetWeddingById, GetWeddingsByIds } from '../controllers/weddingControllers.js';
 import { RegisterWedding } from '../controllers/RegisterControllers.js';
 import { requireSignIn } from '../middlewares/userAuthMiddleware.js';
 
@@ -14,6 +14,7 @@ router.post("/",requireSignIn, formidable(),CreateWedding);
 router.get("/", GetAllWeddings);
 
 router.get("/:wedding_id", GetWeddingById);
+router.get("/get/ids",requireSignIn, GetWeddingsByIds);
 
 
 

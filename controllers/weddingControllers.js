@@ -12,6 +12,7 @@ export const CreateWedding = async (req, res) => {
       hostFirstName,
       hostLastName,
       hostEmail,
+      hostRelation,
       hostPhoneNumber,
       groomFirstName,
       groomLastName,
@@ -25,6 +26,7 @@ export const CreateWedding = async (req, res) => {
       events,
       foodOffered,
       accountDetails,
+
     } = req.fields;
 
     // Convert facilitiesProvided to an array
@@ -89,6 +91,7 @@ console.log(filesArray);
       hostFirstName,
       hostLastName,
       hostEmail,
+      hostRelation,
       hostPhoneNumber,
       groomFirstName,
       groomLastName,
@@ -141,7 +144,8 @@ export const GetAllWeddings = async (req, res) => {
 
 export const GetWeddingById = async (req, res) => {
   try {
-    const { wedding_id } = req.params;
+
+     const { wedding_id } = req.params;
     const wedding = await Wedding.findById(wedding_id);
     if (!wedding) {
       return res.status(404).json({ message: "Wedding not found" });
@@ -152,3 +156,34 @@ export const GetWeddingById = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const GetWeddingsByIds = async (req, res) => {
+  try {
+    console.log(req.body)
+    const user= await User.findOne({ _id : req.user});
+
+    console.log(user)
+    const  wedding_ids =user.hostedWeddings ;
+    console.log(wedding_ids)
+ 
+    // Check if wedding_ids is an array
+    if (!Array.isArray(wedding_ids)) {
+      return res.status(400).json({ message: "wedding_ids must be an array" });
+    }
+
+    // Retrieve weddings based on the array of IDs
+    const weddings = await Wedding.find({ _id: { $in: wedding_ids } });
+    console.log(weddings)
+
+    // Check if any weddings are found
+    if (weddings.length === 0) {
+      return res.status(404).json({ message: "No weddings found" });
+    }
+
+    res.status(200).json({ weddings });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+

@@ -23,6 +23,11 @@ const agricultureSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    farmName:{
+      type:String,
+      required:true
+    },
+
     whatToTeach: {
       type: String,
       required: true,
@@ -53,7 +58,7 @@ const agricultureSchema = new mongoose.Schema(
         country: {
             type: String,
           },
-          region:{
+          state:{
             type: String
           },
           city:{
@@ -76,10 +81,10 @@ const agricultureSchema = new mongoose.Schema(
           type: Date,
           required: true,
         },
-        classTime: {
+        classTime: [{
           type: String,
           required: true,
-        },
+        }],
         classDescription: {
           type: String,
           required: true,
