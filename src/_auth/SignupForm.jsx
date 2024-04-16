@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import { useSignupMutation } from "../store/api/AuthApi";
-import { useAppDispatch } from "../store/Hook";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserContext } from "../context/useUserContext";
 

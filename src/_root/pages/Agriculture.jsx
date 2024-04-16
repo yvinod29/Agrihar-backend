@@ -30,10 +30,9 @@ const Agriculture = () => {
                                 <div className="relative">
                                     <img src={agriculture.media[0].secureUrl} alt="agriculture Image" className="w-[400px] h-[350px] rounded-md" />
                                     <div className="absolute bottom-0 left-2 right-0 text-left py-2">
-                                        <h2 className="text-3xl font-bold text-white">
-                                            {agriculture.instructorFirstName}  
-                                        </h2>
+                                        
                                     </div>
+                                    <h2 className='text-xl font-bold p-1'>{agriculture.farmName}</h2>
                                 </div>
                              </Link>
                             {/* Add other details as needed */}

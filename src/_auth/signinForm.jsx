@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import   { useEffect, useState } from "react";
 import { useSigninMutation } from "../store/api/AuthApi";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../context/useUserContext";
@@ -73,7 +73,7 @@ const SigninForm = () => {
                         {isLoading ? "Logging In..." : "Login"}
                     </button>
                     <div className="text-center py-2 text-gray-500">
-                        Don't have an account yet?{" "}
+                        Don&apos;t have an account yet?
                         <Link className="underline text-black" to={"/signup"}>
                             Register now
                         </Link>

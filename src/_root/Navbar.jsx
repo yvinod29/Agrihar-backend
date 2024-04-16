@@ -28,8 +28,8 @@ const Navbar = () => {
 
   const navItems = [
     { link: "Home", path: "" },
-    { link: "Wedding", path: "wedding" },
-    { link: "Agriculture", path: "agriculture" },
+     { link: "Agriculture", path: "agriculture" },
+     { link: "Profile", path: "profile" },
    ];
 
   const menuItems = navItems.filter(
@@ -51,7 +51,7 @@ const Navbar = () => {
         <div className="p-2 flex justify-between">
           <a href="/" className="flex items-center gap-1">
             <img src="" alt="" />
-            <span className="font-bold text-xl text-primary">WeddingBells</span>
+            <span className="font-bold text-3xl text-primary">Agrihar</span>
           </a>
 
           {/* Desktop Menu */}
