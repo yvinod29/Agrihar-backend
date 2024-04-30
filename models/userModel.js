@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
  
- const userSchema = new mongoose.Schema({
+
+const userSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true
@@ -45,9 +46,44 @@ import mongoose from "mongoose";
         ref: 'Wedding'
     }],
      
-    registeredAgriculture: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Agriculture'
+    registeredAgricultureSessions: [{
+        name:{
+            type:String,
+            required:true
+        },
+        phoneNumber:{
+            type:String,
+            required:true
+        },
+        email:{
+            type:String,
+            required:true
+        },
+        numberOfGuests:{
+            type:String,
+            required:true
+
+        },
+        date:{
+            type:Date,
+            required:true
+        },
+        timings:{
+            type:String,
+            required:true
+        },
+        agricultureSessionId:{
+            type:String,
+            required:true
+        },
+        payment:{
+            type:Boolean,
+            
+        },
+        paidAmount:{
+            type:Number
+        }
+        
     }],
     registeredFitness: [{
         type: mongoose.Schema.Types.ObjectId,

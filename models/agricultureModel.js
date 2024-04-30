@@ -1,5 +1,32 @@
 import mongoose from "mongoose";
 import RegistrationSchema from "./registerModel.js";
+const Schema = mongoose.Schema;
+
+const studentDetailsSchema = new Schema({
+  userId:{
+      type:String,
+   },
+  name: {
+      type: String,
+      required: true
+  },
+  email: {
+      type: String,
+      required: true
+  },
+  phoneNumber: {
+      type: String,
+      required: true
+  },
+  numberOfGuests: {
+      type: Number,
+  },
+  payment:{
+    type:Boolean,
+    // required:true
+
+  }
+});
 
 const agricultureSchema = new mongoose.Schema(
   {
@@ -82,15 +109,16 @@ const agricultureSchema = new mongoose.Schema(
           required: true,
         },
         classTime: [{
-          type: String,
-          required: true,
-        }],
-        classDescription: {
-          type: String,
-          required: true,
+          time: {
+            type: String,
+            required: true
         },
-      },
-    ],
+        registeredStudents: [studentDetailsSchema]
+           
+        }],
+        
+    },
+  ],
     media: [{
         publicId: {
           type: String,

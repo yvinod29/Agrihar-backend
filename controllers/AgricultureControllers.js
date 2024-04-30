@@ -145,6 +145,35 @@ export const GetAgricultureFarmsByIds = async (req, res) => {
   }
 };
 
+
+export const GetRegisteredAgricultureFarmsByIds = async (req, res) => {
+  try {
+     const user = await User.findOne({ _id: req.user });
+
+     const agricultureFarms_ids = user.registeredAgricultureSessions?.map(session => session.agricultureSessionId) || [];
+ 
+    // Check if wedding_ids is an array
+    if (!Array.isArray(agricultureFarms_ids)) {
+      return res.status(400).json({ message: " must be an array" });
+    }
+
+          // Retrieve weddings based on the array of IDs
+    const agricultureFarms = await Agriculture.find({
+      _id: { $in: agricultureFarms_ids },
+    });
+ 
+    // Check if any weddings are found
+    if (agricultureFarms.length === 0) {
+      return res.status(404).json({ message: "Not found" });
+    }
+
+    res.status(200).json({ agricultureFarms });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 export const UpdateAgricultureSession = async (req, res) => {
   try {
     const updateFields = req.body;
@@ -193,5 +222,86 @@ export const UpdateScheduleOfSession = async (req, res) => {
       res.status(200).json(updatedAgricultureSession); // Send the updated document as JSON response
   } catch (error) {
       res.status(500).json({ error: 'Internal Server Error' }); // Handle any errors
+  }
+};
+
+
+ 
+export const BookSession = async (req, res) => {
+   const { agriculture_id } = req.params;
+   const userId=req.user._id
+    const { firstName, email, numberOfGuests, selectedDate, selectedTime, phoneNumber  ,pricePerSession} = req.body;
+
+  try {
+    // Find the agriculture session by ID
+     const agricultureSession = await Agriculture.findById(agriculture_id);
+    // console.log(agricultureSession)
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new Error('User not found');
+    }
+     
+    if (!agricultureSession) {
+      return res.status(404).json({ error: 'Agriculture session not found' });
+    }
+ 
+    // Find the slot in the schedule matching the selected date and time
+    const slot = agricultureSession.schedule.find(entry => {
+    
+
+      return (
+        new Date(entry.classDate).toISOString().substring(0,10) === selectedDate.substring(0,10)  && // Compare dates
+        entry.classTime.some(timeSlot => timeSlot.time === selectedTime) 
+
+      );
+    });
+    
+    console.log(slot)
+
+    if (!slot) {
+      return res.status(404).json({ error: 'Selected date and time not found in the schedule' });
+    }
+
+    // Push the student information into the registeredStudents array of the slot
+       slot.classTime.forEach(timeSlot => {
+        if (timeSlot && timeSlot.time === selectedTime && Array.isArray(timeSlot.registeredStudents)) {
+          // Check if timeSlot exists, time matches, and registeredStudents is an array
+          timeSlot.registeredStudents.push({
+            userId:  user._id,
+            name: firstName,
+            email,
+            phoneNumber,
+            numberOfGuests: parseInt(numberOfGuests),
+          });
+        }
+      });
+
+
+     user.registeredAgricultureSessions.push({
+        date: new Date(selectedDate),
+        timings: selectedTime,
+        agricultureSessionId: agriculture_id, // Make sure to provide the agriculture session ID
+        payment: false, // Set payment to false by default
+        paidAmount: pricePerSession, // Set paidAmount to 0 by default
+        name: firstName,
+        email,
+        phoneNumber,
+        numberOfGuests: parseInt(numberOfGuests),
+        
+
+      });
+  
+      // Save the updated user document
+      await user.save();
+       
+    
+
+    // Save the updated agriculture session
+    await agricultureSession.save();
+
+    res.status(200).json({ message: 'Booking session saved successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' }); // Handle any errors
   }
 };
