@@ -13,6 +13,7 @@ import {
     UpdateScheduleOfSession,
     DeleteScheduleOfSession,
 } from "../controllers/AgricultureControllers.js";
+import { ZoomLink } from '../controllers/ZoomControllers.js';
 
  
 const router = express.Router();
@@ -33,7 +34,7 @@ router.get("/get/ids",requireSignIn,  GetAgricultureFarmsByIds);
 
 router.get("/get/registered/ids",requireSignIn,  GetRegisteredAgricultureFarmsByIds);
 
-
+router.post('/api/meetings',ZoomLink);
 
 router.delete(
     "/delete_schedule/:agriculture_id/:schedule_id",

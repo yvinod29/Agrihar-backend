@@ -82,12 +82,19 @@ const userSchema = new mongoose.Schema({
         },
         paidAmount:{
             type:Number
+        },
+        mode:{
+            type: String
         }
         
     }],
     registeredFitness: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Fitness'
+    }],
+    reviews: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Review'
     }],
     resetCode: {
         code: {

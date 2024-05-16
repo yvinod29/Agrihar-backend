@@ -1,7 +1,8 @@
 import cloudinary from "cloudinary";
-
 import Agriculture from "../models/agricultureModel.js"; // Import the Agriculture model
 import User from "../models/userModel.js"; // Import the user model
+import { sendEventRegistrationConfirmationEmail } from "../middlewares/emailHelper.js";
+
 
 export const CreateAgricultureSession = async (req, res) => {
     try {
@@ -226,12 +227,14 @@ export const UpdateScheduleOfSession = async (req, res) => {
     try {
         // Find the agriculture session by ID
         const agricultureSession = await Agriculture.findById(agriculture_id);
+        console.log(req.body)
 
         // Iterate over the new schedules and push each one individually
         for (const newSchedule of req.body) {
             const { classDate, classTime } = newSchedule;
-            const formattedClassTime = classTime.map((time) => ({
-                time: time.time,
+            const formattedClassTime = classTime.map((ModeAndTime) => ({
+                time: ModeAndTime.time,
+                mode: ModeAndTime.mode
             }));
             agricultureSession.schedule.push({
                 classDate: new Date(classDate),
@@ -259,6 +262,7 @@ export const BookSession = async (req, res) => {
         selectedTime,
         phoneNumber,
         pricePerSession,
+        mode
     } = req.body;
 
     try {
@@ -309,6 +313,7 @@ export const BookSession = async (req, res) => {
                     email,
                     phoneNumber,
                     numberOfGuests: parseInt(numberOfGuests),
+                    mode
                 });
             }
         });
@@ -322,6 +327,7 @@ export const BookSession = async (req, res) => {
             name: firstName,
             email,
             phoneNumber,
+            mode,
             numberOfGuests: parseInt(numberOfGuests),
         });
 
@@ -330,6 +336,14 @@ export const BookSession = async (req, res) => {
 
         // Save the updated agriculture session
         await agricultureSession.save();
+
+        await sendEventRegistrationConfirmationEmail(
+            email,
+            agricultureSession.farmName,
+            selectedDate,
+            selectedTime,
+            numberOfGuests
+        );
 
         res.status(200).json({ message: "Booking session saved successfully" });
     } catch (error) {

@@ -3,29 +3,31 @@ import RegistrationSchema from "./registerModel.js";
 const Schema = mongoose.Schema;
 
 const studentDetailsSchema = new Schema({
-  userId:{
-      type:String,
-   },
+  userId: {
+    type: String,
+  },
   name: {
-      type: String,
-      required: true
+    type: String,
+    required: true,
   },
   email: {
-      type: String,
-      required: true
+    type: String,
+    required: true,
   },
   phoneNumber: {
-      type: String,
-      required: true
+    type: String,
+    required: true,
   },
   numberOfGuests: {
-      type: Number,
+    type: Number,
   },
-  payment:{
-    type:Boolean,
+  payment: {
+    type: Boolean,
     // required:true
-
-  }
+  },
+  mode: {
+    type: String,
+  },
 });
 
 const agricultureSchema = new mongoose.Schema(
@@ -35,8 +37,8 @@ const agricultureSchema = new mongoose.Schema(
       required: true,
     },
     instructorLastName: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     instructorPhoneNumber: {
       type: String,
@@ -50,9 +52,9 @@ const agricultureSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    farmName:{
-      type:String,
-      required:true
+    farmName: {
+      type: String,
+      required: true,
     },
 
     whatToTeach: {
@@ -63,7 +65,7 @@ const agricultureSchema = new mongoose.Schema(
       type: [String], // Array of languages known
       required: true,
     },
-    
+
     studentsPerClass: {
       type: Number,
       required: true,
@@ -71,55 +73,64 @@ const agricultureSchema = new mongoose.Schema(
     pricePerSession: {
       type: Number,
       required: true,
-      default:1500
+      default: 1500,
     },
     requirements: {
       type: String,
       required: true,
     },
     facilitiesProvided: {
-        type: [String],
-        required: true,
+      type: [String],
+      required: true,
+    },
+    location: {
+      country: {
+        type: String,
       },
-    location:  {
-        country: {
-            type: String,
-          },
-          state:{
-            type: String
-          },
-          city:{
-            type:String
-          },
-          postalCode: {
-            type: String,
-          },
-          street: {
-            type: String,
-          },
-          venueName: {
-            type: String,
-          },
-        }
-    ,
+      state: {
+        type: String,
+      },
+      city: {
+        type: String,
+      },
+      postalCode: {
+        type: String,
+      },
+      street: {
+        type: String,
+      },
+      venueName: {
+        type: String,
+      },
+    },
     schedule: [
       {
         classDate: {
           type: Date,
           required: true,
         },
-        classTime: [{
-          time: {
-            type: String,
-            required: true
-        },
-        registeredStudents: [studentDetailsSchema]
-           
-        }],
-        
-    },
-  ],
-    media: [{
+        classTime: [
+          {
+            time: {
+              type: String,
+              required: true,
+            },
+            registeredStudents: [studentDetailsSchema],
+            mode: {
+              type: String,
+            },
+          },
+        ],
+      },
+    ],
+    reviews: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Review",
+      },
+    ],
+    media: [
+      {
         publicId: {
           type: String,
           required: true,
@@ -128,17 +139,17 @@ const agricultureSchema = new mongoose.Schema(
           type: String,
           required: true,
         },
-      }],
+      },
+    ],
     accountDetails: {
       bankAccountNumber: {
-
         type: String,
         required: true,
       },
-      IFSCcode:{
-        type:String,
-        required:true
-      }
+      IFSCcode: {
+        type: String,
+        required: true,
+      },
     },
     hostedBy: {
       type: mongoose.Schema.Types.ObjectId,

@@ -6,6 +6,7 @@ import colors from 'colors';
 import connectDB from "./config/db.js";
 import userAuthRoutes from './routes/userAuthRoute.js'
 import weddingRoutes from './routes/weddingRoutes.js'
+import reviewRoutes from './routes/reviewRoute.js'
 import agricultureRoutes from './routes/agricultureRoutes.js'
 import User from './models/userModel.js';
 import { requireSignIn } from "./middlewares/userAuthMiddleware.js";
@@ -31,11 +32,12 @@ app.use('/api/v1/wedding',weddingRoutes);
 
 app.use('/api/v1/agriculture',agricultureRoutes);
 
+app.use('/api/v1/review',reviewRoutes);
 
 
 //rest api
 app.get("/", (req, res) => {
-  res.send("<h1>Welcome to Weddingbells  API service</h1>");
+  res.send("<h1>Welcome to  Agrihar  API service</h1>");
 });
 
 //PORT
