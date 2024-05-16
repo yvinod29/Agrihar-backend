@@ -46,3 +46,8 @@ button.primary {
     background-color: #f5385d;
     @apply bg-primary p-2 w-full text-white rounded-2xl;
 }
+
+.custom-calendar .fc-day {
+    color: red !important; /* Change color to red */
+  }
+  

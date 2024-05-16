@@ -15,7 +15,7 @@ const SheduledSessions = ({ AgricultureSession ,  handleRefetch }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [date, setDate] = useState("");
   const handleDateChange = (date) => {
-    setSelectedDate(date.format("M/DD/YYYY"));
+    setSelectedDate(date.format("M/D/YYYY"));
   };
   const handleChooseDate = (date) => {
     console.log(selectedDate);
@@ -71,7 +71,7 @@ const SheduledSessions = ({ AgricultureSession ,  handleRefetch }) => {
                     month: "long",
                     day: "numeric",
                   })}
-                  {selectedDate}
+                  
                 </h3>
 
                 <div>
@@ -150,7 +150,7 @@ const SheduledSessions = ({ AgricultureSession ,  handleRefetch }) => {
                 <ul>
                   {entry.classTime.map((times, index) => (
                     <li key={index} className="mb-1">
-                      {times.time}
+                      {times.time} ({times.mode})
                     </li>
                   ))}
                 </ul>

@@ -2,37 +2,31 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useUserContext } from "../context/useUserContext";
 import { useVerifyUserMutation } from "../store/api/AuthApi";
+import ReviewComponent from "./ReviewComponent";
 
-const RegisteredStudentDetails = ({ agriculture_id , handleRefetch}) => {
+const RegisteredStudentDetails = ({ agriculture_id, handleRefetch }) => {
   console.log(agriculture_id);
   const { user } = useUserContext();
-  const [userData, setUserData]=useState(user);
+  const [userData, setUserData] = useState(user);
   const [verifyuser, { isError, isSuccess }] = useVerifyUserMutation();
 
-
-  useEffect(()=>{
+  useEffect(() => {
     fetchData();
+  }, [handleRefetch]);
 
-  },[handleRefetch])
-
-
-  const fetchData =async()=>{
-
-    try{
-        const token =localStorage.getItem("token");
-        const session = await verifyuser({ token });
-        console.log("userDAta")
-        if(session.data){
-        console.log(session.data.user)
-        setUserData(session.data.user)
-        }
-
-    }catch(error){
-            console.log(error)
+  const fetchData = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const session = await verifyuser({ token });
+      console.log("userDAta");
+      if (session.data) {
+        console.log(session.data.user);
+        setUserData(session.data.user);
+      }
+    } catch (error) {
+      console.log(error);
     }
-
-  }
-
+  };
 
   const registeredAgricultureSessions = userData.registeredAgricultureSessions;
 
@@ -41,9 +35,20 @@ const RegisteredStudentDetails = ({ agriculture_id , handleRefetch}) => {
     (session) => session.agricultureSessionId === agriculture_id
   );
 
+  const isDayCompleted = (session) => {
+    // Check if the session date is before the current date
+    const sessionDate = new Date(session.date);
+    const currentDate = new Date();
+    return currentDate > sessionDate;
+  };
+
+  
+
   return (
-    <div>
-      <h1 className="text-3xl mt-3 font-bold ml-8 mb-6">Registered Sessions</h1>
+    <div className="w-1/2">
+      <h1 className="text-3xl mt-3 font-bold ml-8 mb-6 ">
+        Registered Sessions
+      </h1>
       {matchedSessions.map((session, index) => (
         <div key={index} className="border border-gray-200 rounded-md p-4">
           <h2 className="text-lg font-semibold mb-2">{session.fullName}</h2>
@@ -71,6 +76,15 @@ const RegisteredStudentDetails = ({ agriculture_id , handleRefetch}) => {
           <p>
             <strong>Time :</strong> {session.timings}
           </p>
+          <p>
+            <strong>Mode :</strong> {session.mode}
+          </p>
+
+          {isDayCompleted(session) && (
+
+            <ReviewComponent/>
+          
+          )}
         </div>
       ))}
     </div>
@@ -79,7 +93,7 @@ const RegisteredStudentDetails = ({ agriculture_id , handleRefetch}) => {
 
 RegisteredStudentDetails.propTypes = {
   agriculture_id: PropTypes.string.isRequired,
-   handleRefetch: PropTypes.func.isRequired,
+  handleRefetch: PropTypes.func.isRequired,
 };
 
 export default RegisteredStudentDetails;

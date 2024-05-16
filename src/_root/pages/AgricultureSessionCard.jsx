@@ -11,6 +11,8 @@ import Button from "@mui/material/Button";
 import CloseIcon from "@mui/icons-material/Close";
 import SheduledSessions from "../../components/SheduledSessions";
 import RegisteredStudentDetails from "../../components/RegisteredStudentDetails";
+import multiColors from "react-multi-date-picker/plugins/colors"
+
 
 const AgricultureSessionCard = () => {
   const { agriculture_id } = useParams();

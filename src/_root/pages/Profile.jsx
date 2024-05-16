@@ -27,9 +27,6 @@ const Profile = () => {
         
   }
 
- 
-
-
   const signOut = () => {
     localStorage.removeItem("token");
     navigate("/signin");

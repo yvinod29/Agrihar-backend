@@ -3,16 +3,14 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 
 import { useUserContext } from "../../context/useUserContext";
 import { useGetAgricultureSessionByIdQuery } from "../../store/api/AgricultureApi";
-import DatePicker from "react-multi-date-picker";
-import { Calendar } from "react-multi-date-picker"
 import RegisteredStudentsForSession from "../../components/RegisteredStudentsForSession";
+ import CalenderComponent from "../../components/CalenderComponent";
 
 
 
 const AgricultureHostCard = () => {
   const { agriculture_id } = useParams();
-  const { user } = useUserContext();
-  const navigate = useNavigate();
+   const navigate = useNavigate();
   const [AgricultureSessionData, setAgricultureSesstionData] = useState(null); // Initialize with null
 
   const { data, error, isLoading, isSuccess, refetch } =
@@ -27,8 +25,7 @@ const AgricultureHostCard = () => {
 
     ) {
       setAgricultureSesstionData(data.AgricultureSession);
-      const datesFromSchedule = data.AgricultureSession.schedule.map(entry => new Date(entry.classDate));
-      setValues(datesFromSchedule);
+      
     }
   }, [isLoading, isSuccess, data]);
   const [showMore, setShowMore] = useState(false);
@@ -51,13 +48,10 @@ const AgricultureHostCard = () => {
 
   const handleSetSheduleButton = () => {
     navigate(`/${agriculture_id}/set-schedule`);
+    
   };
 
-  const [values, setValues] = useState([
-    new Date('2024-04-01'), // Default date 1
-    new Date('2024-04-05'), // Default date 2
-    new Date('2024-04-10')  // Default date 3
-  ]);
+ 
   return (
     <div className=" md:flex md:justify-center  md:m-20  gap-9">
       {isLoading ? (
@@ -136,12 +130,10 @@ const AgricultureHostCard = () => {
                 </button>
                 <div className="p-2">
                   Scheduled Classes
-                <Calendar
-                value={values}
-                readOnly
-                   /> 
 
+                  <CalenderComponent schedule={AgricultureSessionData.schedule}/>
 
+                
                 </div>
               </div>
             </div>

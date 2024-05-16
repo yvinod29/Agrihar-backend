@@ -82,6 +82,17 @@ export const agricultureApi = createApi({
     
             }),
         }),
+         UpdateReview: builder.mutation({
+            query: ({  token, agriculture_id , review}) => ({
+                url: `/api/v1/review/${agriculture_id}/`,
+                method: "POST",
+                headers: {
+                    Authorization: `${token}`,
+                },
+                body:review
+    
+            }),
+        }),
     }),
 });
 
@@ -95,5 +106,6 @@ export const {
     useBookSessionMutation,
     useGetRegisteredAgricultureSesssionsByIdsMutation,
     useDeleteSheduleOfSessionMutation,
+    useUpdateReviewMutation
 } = agricultureApi;
 
