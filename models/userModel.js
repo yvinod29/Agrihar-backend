@@ -45,6 +45,9 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Wedding'
     }],
+    registeredAgricultureSessionIds:[{
+            type:String
+    }],
      
     registeredAgricultureSessions: [{
         name:{
@@ -85,6 +88,13 @@ const userSchema = new mongoose.Schema({
         },
         mode:{
             type: String
+        },
+        guests: [{ 
+            firstName: String, 
+            email: String 
+          }] ,
+        join_url:{
+            type:String
         }
         
     }],

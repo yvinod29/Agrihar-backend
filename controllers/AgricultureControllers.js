@@ -1,6 +1,8 @@
 import cloudinary from "cloudinary";
 import Agriculture from "../models/agricultureModel.js"; // Import the Agriculture model
 import User from "../models/userModel.js"; // Import the user model
+import Registration from '../models/registrationModel.js';
+
 import { sendEventRegistrationConfirmationEmail } from "../middlewares/emailHelper.js";
 
 
@@ -23,13 +25,10 @@ export const CreateAgricultureSession = async (req, res) => {
             farmName,
         } = req.fields;
 
-        console.log(req.fields);
-
-        // Convert location data into an array
-        console.log(location);
+ 
+      
         const locationArray = JSON.parse(location);
-        console.log(locationArray);
-
+ 
         // Convert schedule JSON string into an array of objects
 
         const accountDetailsArray = JSON.parse(accountDetails);
@@ -37,8 +36,7 @@ export const CreateAgricultureSession = async (req, res) => {
         // Upload media files to Cloudinary
         const mediaArray = [];
         const formData = req.files;
-        console.log(req.files);
-        for (const file of Object.values(formData)) {
+         for (const file of Object.values(formData)) {
             console.log("image Found");
             const uploadResult = await cloudinary.uploader.upload(file.path, {
                 folder: "agriculture-media", // Set the folder in Cloudinary where you want to store agriculture media
@@ -118,13 +116,10 @@ export const GetAgricultureSessionById = async (req, res) => {
 
 export const GetAgricultureFarmsByIds = async (req, res) => {
     try {
-        console.log(req.body);
-        const user = await User.findOne({ _id: req.user });
+         const user = await User.findOne({ _id: req.user });
 
-        console.log(user);
-        const agricultureFarms_ids = user.hostedAgriculture;
-        console.log(agricultureFarms_ids);
-
+         const agricultureFarms_ids = user.hostedAgriculture;
+ 
         // Check if wedding_ids is an array
         if (!Array.isArray(agricultureFarms_ids)) {
             return res
@@ -136,8 +131,7 @@ export const GetAgricultureFarmsByIds = async (req, res) => {
         const agricultureFarms = await Agriculture.find({
             _id: { $in: agricultureFarms_ids },
         });
-        console.log(agricultureFarms);
-
+ 
         // Check if any weddings are found
         if (agricultureFarms.length === 0) {
             return res.status(404).json({ message: "No weddings found" });
@@ -185,11 +179,9 @@ export const UpdateAgricultureSession = async (req, res) => {
     try {
         const updateFields = req.body;
 
-        console.log(updateFields);
-
+ 
         const { agriculture_id } = req.params;
-        console.log(agriculture_id);
-        const agricultureExists = await Agriculture.exists({
+         const agricultureExists = await Agriculture.exists({
             _id: agriculture_id,
         });
 
@@ -226,9 +218,8 @@ export const UpdateScheduleOfSession = async (req, res) => {
 
     try {
         // Find the agriculture session by ID
-        const agricultureSession = await Agriculture.findById(agriculture_id);
-        console.log(req.body)
-
+         const agricultureSession = await Agriculture.findById(agriculture_id);
+ 
         // Iterate over the new schedules and push each one individually
         for (const newSchedule of req.body) {
             const { classDate, classTime } = newSchedule;
@@ -251,9 +242,11 @@ export const UpdateScheduleOfSession = async (req, res) => {
     }
 };
 
+
 export const BookSession = async (req, res) => {
     const { agriculture_id } = req.params;
     const userId = req.user._id;
+
     const {
         firstName,
         email,
@@ -262,80 +255,67 @@ export const BookSession = async (req, res) => {
         selectedTime,
         phoneNumber,
         pricePerSession,
-        mode
+        mode,
+        guests,
+        timeId,
+        dateId,
+        farmName
     } = req.body;
+    console.log(req.body)
 
     try {
         // Find the agriculture session by ID
         const agricultureSession = await Agriculture.findById(agriculture_id);
-        // console.log(agricultureSession)
+        if (!agricultureSession) {
+            return res.status(404).json({ error: "Agriculture session not found" });
+        }
+
+        console.log(1)
+        
+        // Find the slot in the schedule matching the dateId and timeId
+        const slot = agricultureSession.schedule.find((entry) => entry._id.toString() === dateId);
+        if (!slot) {
+            return res.status(404).json({ error: "Selected date not found in the schedule" });
+        }
+        console.log(2)
+        
+        const timeSlot = slot.classTime.find((ts) => ts._id.toString() === timeId);
+        if (!timeSlot) {
+            return res.status(404).json({ error: "Selected time not found in the schedule" });
+        }
+        console.log(3)
+
+        // Create and save the registration details
+        const registration = new Registration({
+            name: firstName,
+            phoneNumber,
+            email,
+            numberOfGuests,
+            date: selectedDate,
+            timings: selectedTime,
+            agricultureSessionId: agriculture_id,
+            mode,
+            guests: guests || [],
+            dataId: dateId,
+            timeId: timeId,
+            userId: userId,
+            farmName:farmName
+        });
+        await registration.save();
+
+        // Update the agriculture session with the registration ID
+        timeSlot.registeredStudentIds.push(registration._id.toString());
+        await agricultureSession.save();
+
+        // Update the user with the registration ID
         const user = await User.findById(userId);
         if (!user) {
-            throw new Error("User not found");
+            return res.status(404).json({ error: "User not found" });
         }
+        console.log(4)
 
-        if (!agricultureSession) {
-            return res
-                .status(404)
-                .json({ error: "Agriculture session not found" });
-        }
-
-        // Find the slot in the schedule matching the selected date and time
-        const slot = agricultureSession.schedule.find((entry) => {
-            return (
-                new Date(entry.classDate).toISOString().substring(0, 10) ===
-                    selectedDate.substring(0, 10) && // Compare dates
-                entry.classTime.some(
-                    (timeSlot) => timeSlot.time === selectedTime
-                )
-            );
-        });
-
-        console.log(slot);
-
-        if (!slot) {
-            return res.status(404).json({
-                error: "Selected date and time not found in the schedule",
-            });
-        }
-
-        // Push the student information into the registeredStudents array of the slot
-        slot.classTime.forEach((timeSlot) => {
-            if (
-                timeSlot &&
-                timeSlot.time === selectedTime &&
-                Array.isArray(timeSlot.registeredStudents)
-            ) {
-                // Check if timeSlot exists, time matches, and registeredStudents is an array
-                timeSlot.registeredStudents.push({
-                    userId: user._id,
-                    name: firstName,
-                    email,
-                    phoneNumber,
-                    numberOfGuests: parseInt(numberOfGuests),
-                    mode
-                });
-            }
-        });
-
-        user.registeredAgricultureSessions.push({
-            date: new Date(selectedDate),
-            timings: selectedTime,
-            agricultureSessionId: agriculture_id, // Make sure to provide the agriculture session ID
-            payment: false, // Set payment to false by default
-            paidAmount: pricePerSession, // Set paidAmount to 0 by default
-            name: firstName,
-            email,
-            phoneNumber,
-            mode,
-            numberOfGuests: parseInt(numberOfGuests),
-        });
-
-        // Save the updated user document
+        user.registeredAgricultureSessionIds.push(registration._id.toString());
         await user.save();
-
-        // Save the updated agriculture session
-        await agricultureSession.save();
 
         await sendEventRegistrationConfirmationEmail(
             email,
@@ -348,15 +328,14 @@ export const BookSession = async (req, res) => {
         res.status(200).json({ message: "Booking session saved successfully" });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: "Internal Server Error" }); // Handle any errors
+        res.status(500).json({ error: "Internal Server Error" });
     }
 };
 
 // Delete a schedule from an agriculture session
 export const DeleteScheduleOfSession = async (req, res) => {
     const { agriculture_id, schedule_id } = req.params;
-    console.log(req.params);
-    // Assuming you pass the schedule ID in the request body
+     // Assuming you pass the schedule ID in the request body
     // console.log(scheduleId);
     // console.log(agriculture_id);
     try {
@@ -383,3 +362,54 @@ export const DeleteScheduleOfSession = async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" }); // Handle any errors
     }
 };
+
+
+
+export const UpdateMeetingLink = async (req, res) => {
+    const { agriculture_id } = req.params;
+    const { classDateId, classTimeId, join_url } = req.body;
+  
+    try {
+      // Find the agriculture session by ID
+      const agricultureSession = await Agriculture.findById(agriculture_id);
+  
+      // Check if the agriculture session exists
+      if (!agricultureSession) {
+        return res.status(404).json({ error: "Agriculture session not found" });
+      }
+  
+      if (!join_url) {
+        return res.status(400).json({ error: "Join URL is required" });
+      }
+  
+      // Find the class date within the schedule
+      let foundClassDate, foundClassTime;
+      agricultureSession.schedule.forEach(schedule => {
+        if (schedule._id.toString() === classDateId) {
+          foundClassDate = schedule;
+          foundClassTime = schedule.classTime.find(time => time._id.toString() === classTimeId);
+        }
+      });
+  
+      if (!foundClassDate || !foundClassTime) {
+        return res.status(404).json({ error: "Class date or class time not found" });
+      }
+  
+      // Update the join URL in the agriculture session
+      foundClassTime.join_url = join_url;
+      await agricultureSession.save();
+  
+      // Update the join URL in all related registrations
+      const registeredStudentIds = foundClassTime.registeredStudentIds;
+      await Registration.updateMany(
+        { _id: { $in: registeredStudentIds } },
+        { $set: { join_url: join_url } }
+      );
+  
+      // Send the updated document as JSON response
+      res.status(200).json(agricultureSession);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  };

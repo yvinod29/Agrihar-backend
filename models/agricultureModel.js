@@ -1,35 +1,7 @@
 import mongoose from "mongoose";
-import RegistrationSchema from "./registerModel.js";
-const Schema = mongoose.Schema;
+ const Schema = mongoose.Schema;
 
-const studentDetailsSchema = new Schema({
-  userId: {
-    type: String,
-  },
-  name: {
-    type: String,
-    required: true,
-  },
-  email: {
-    type: String,
-    required: true,
-  },
-  phoneNumber: {
-    type: String,
-    required: true,
-  },
-  numberOfGuests: {
-    type: Number,
-  },
-  payment: {
-    type: Boolean,
-    // required:true
-  },
-  mode: {
-    type: String,
-  },
-});
-
+ 
 const agricultureSchema = new mongoose.Schema(
   {
     instructorFirstName: {
@@ -115,10 +87,16 @@ const agricultureSchema = new mongoose.Schema(
               type: String,
               required: true,
             },
-            registeredStudents: [studentDetailsSchema],
+            registeredStudentIds: [{
+              // type: mongoose.Schema.Types.ObjectId,
+              type:String
+            }],
             mode: {
               type: String,
             },
+            join_url:{
+              type: String,
+            }
           },
         ],
       },
@@ -156,15 +134,15 @@ const agricultureSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    registeredStudents: [
-      {
-        userId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "User",
-        },
-        registeredInfo: RegistrationSchema,
-      },
-    ],
+    // registeredStudents: [
+    //   {
+    //     userId: {
+    //       type: mongoose.Schema.Types.ObjectId,
+    //       ref: "User",
+    //     },
+    //     registeredInfo: RegistrationSchema,
+    //   },
+    // ],
   },
   {
     timestamps: true,

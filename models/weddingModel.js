@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
-import RegistrationSchema from "./registerModel.js";
-
+ 
 const weddingSchema = new mongoose.Schema(
   {
     hostRole:{
@@ -162,8 +161,7 @@ const weddingSchema = new mongoose.Schema(
           type: mongoose.Schema.Types.ObjectId,
           ref: "User",
         },
-        registeredInfo: RegistrationSchema,
-      },
+       },
     ],
   },
   {
