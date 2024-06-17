@@ -14,6 +14,9 @@ export const CreateAgricultureSession = async (req, res) => {
             instructorPhoneNumber,
             instructorEmail,
             instructorDescription,
+            instructorAge,
+            instructorExperience,
+            instructorQualification,
             whatToTeach,
             studentsPerClass,
             pricePerSession,
@@ -23,6 +26,7 @@ export const CreateAgricultureSession = async (req, res) => {
             accountDetails,
             langugaesKnown,
             farmName,
+            caption,
         } = req.fields;
 
  
@@ -55,7 +59,11 @@ export const CreateAgricultureSession = async (req, res) => {
             instructorPhoneNumber,
             instructorEmail,
             instructorDescription,
+            instructorAge,
+            instructorExperience,
+            instructorQualification,
             farmName,
+            caption,
             whatToTeach,
             studentsPerClass,
             pricePerSession,
@@ -217,16 +225,22 @@ export const UpdateScheduleOfSession = async (req, res) => {
     const { agriculture_id } = req.params;
 
     try {
+        console.log(req.body)
         // Find the agriculture session by ID
          const agricultureSession = await Agriculture.findById(agriculture_id);
  
         // Iterate over the new schedules and push each one individually
         for (const newSchedule of req.body) {
             const { classDate, classTime } = newSchedule;
-            const formattedClassTime = classTime.map((ModeAndTime) => ({
-                time: ModeAndTime.time,
-                mode: ModeAndTime.mode
+        
+            const formattedClassTime = classTime.map((data) => ({
+                time: data.time,
+                mode: data.mode,
+                actualPrice:data.actualPrice,
+                suggestedPrice: data.suggestedPrice
+
             }));
+            console.log(formattedClassTime)
             agricultureSession.schedule.push({
                 classDate: new Date(classDate),
                 classTime: formattedClassTime,
@@ -238,6 +252,7 @@ export const UpdateScheduleOfSession = async (req, res) => {
 
         res.status(200).json(updatedAgricultureSession); // Send the updated document as JSON response
     } catch (error) {
+        console.log(error)
         res.status(500).json({ error: "Internal Server Error" }); // Handle any errors
     }
 };

@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
- const Schema = mongoose.Schema;
-
+ 
  
 const agricultureSchema = new mongoose.Schema(
   {
@@ -24,10 +23,27 @@ const agricultureSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    instructorAge:{
+      type:Number,
+      // required :true
+    },
+    instructorExperience:{
+      type: String,
+      // required :true
+    },
+    instructorQualification:{
+      type: String,
+      // required :true
+    },
     farmName: {
       type: String,
       required: true,
     },
+    caption: {
+      type: String,
+      // required: true,
+    },
+
 
     whatToTeach: {
       type: String,
@@ -77,6 +93,7 @@ const agricultureSchema = new mongoose.Schema(
     },
     schedule: [
       {
+      
         classDate: {
           type: Date,
           required: true,
@@ -87,6 +104,7 @@ const agricultureSchema = new mongoose.Schema(
               type: String,
               required: true,
             },
+
             registeredStudentIds: [{
               // type: mongoose.Schema.Types.ObjectId,
               type:String
@@ -94,14 +112,23 @@ const agricultureSchema = new mongoose.Schema(
             mode: {
               type: String,
             },
+            
             join_url:{
               type: String,
+            },
+            actualPrice:{
+              type:Number,
+
+            },
+            suggestedPrice :{
+              type:Number
             }
+
           },
         ],
       },
     ],
-    reviews: [
+    reviewIds: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Review",

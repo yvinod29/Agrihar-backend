@@ -13,7 +13,7 @@ import zoomRoutes from './routes/zoomRoutes.js'
 import User from './models/userModel.js';
 import { requireSignIn } from "./middlewares/userAuthMiddleware.js";
 import cloudinary from './config/cloudinaryConfig.js'; 
-
+ 
 //configure env
 dotenv.config();
 

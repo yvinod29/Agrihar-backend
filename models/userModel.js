@@ -102,10 +102,7 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Fitness'
     }],
-    reviews: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Review'
-    }],
+    
     resetCode: {
         code: {
             type: String,

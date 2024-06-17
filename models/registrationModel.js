@@ -64,7 +64,11 @@ const registrationSchema = new mongoose.Schema({
     refund:{
         type:Boolean,
         default:false
-    }
+    },
+    reviewId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Review'
+    },
 });
 
 const Registration = mongoose.model('Registration', registrationSchema);
